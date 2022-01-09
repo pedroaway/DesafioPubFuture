@@ -1,5 +1,9 @@
 package View;
 
+import ControleDTO.ControleDeContas;
+import Factory.Contas;
+import javax.swing.JOptionPane;
+
 public class TELAPRINCIPAL extends javax.swing.JFrame {
 
     /**
@@ -7,6 +11,10 @@ public class TELAPRINCIPAL extends javax.swing.JFrame {
      */
     public TELAPRINCIPAL() {
         initComponents();
+        
+        TxtInst.setText("");
+        TxtConta.setText("");
+        TxtSaldo.setText("");
     }
 
     /**
@@ -126,17 +134,49 @@ public class TELAPRINCIPAL extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        //entrada de dados da conta
-        String InstBanco, TipoBanco;
+        String InstBanco, TipoConta, valorAux;
         Double Saldo;
+        Saldo = 0.0;
+        InstBanco = "";
+        TipoConta = "";
+        valorAux = "";
+        
         InstBanco = TxtInst.getText();
-        TipoBanco = TxtConta.getText();
-        Saldo = Double.parseDouble(TxtSaldo.getText());
-        System.out.println(Saldo);
+        TipoConta = TxtConta.getText();
+        valorAux = TxtSaldo.getText();
+        
+        if(InstBanco.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Informe o banco", "Informação", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else if(TipoConta.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Informe a conta", "Informação", JOptionPane.INFORMATION_MESSAGE);
+        }else if(valorAux.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Informe um valor", "Informação", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            
+            try{
+                
+                Saldo = Double.parseDouble(valorAux);
+                ControleDeContas ObjConta = new ControleDeContas();    
+                ObjConta.setInst(InstBanco);
+                ObjConta.setSaldo(Saldo);
+                ObjConta.setTipo(TipoConta);
+
+                Contas conta = new Contas();
+                conta.cadastrarFuncionario(ObjConta);
+                JOptionPane.showMessageDialog(this, "Cadastrado com sucesso!", "Salvo", JOptionPane.INFORMATION_MESSAGE);
+                
+                
+                TxtInst.setText("");
+                TxtConta.setText("");
+                TxtSaldo.setText("");
+                
+            }catch(Exception ex){
+                JOptionPane.showMessageDialog(this, "Erro ao cadastrar: "+ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
